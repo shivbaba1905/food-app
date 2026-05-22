@@ -7,7 +7,7 @@ A user-centric food delivery mobile application focused on simplifying the order
 ## 🚀 Case Study Links
 *   🎨 **https://www.figma.com/design/EsqRpBiZ2znWZQIkQWa0UZ/cooking-app-2025?node-id=0-1&p=f&t=4ipkxuRoe4plaX10-0**
 *   **https://www.figma.com/proto/EsqRpBiZ2znWZQIkQWa0UZ/cooking-app-2025?node-id=53-108**
-    **
+*    *https://luminous-hotteok-ced13c.netlify.app/*
 
 ---
 
