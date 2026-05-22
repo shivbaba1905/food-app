@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Food App Portfolio</title>
+    <!-- CSS फाइल को लिंक किया गया है -->
+
+</head>
+<style>
+    /* बेसिक रीसेट */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+/* 📱 मोबाइल फ्रेम का फिक्स साइज (Width: 400px, Height: 667px) */
+.phone-container {
+    width: 100%;
+    max-width: 400px;
+    height: 667px; 
+    background-color: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .phone-container { border-radius: 0px; height: 100vh; max-height: 100vh; }
+}
+
+.app-screen { width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.hidden { display: none !important; }
+
+/* स्क्रॉल सेटिंग्स */
+.auth-scroll-area { width: 100%; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+.home-scroll-area { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; width: 100%; }
+
+/* लॉगिन स्क्रीन हेडर */
+.image-header {
+    width: 100%; height: 160px;
+    background: linear-gradient(135deg, #ff9900, #ff5500);
+    display: flex; justify-content: center; align-items: center;
+    color: white; font-size: 24px; font-weight: bold; flex-shrink: 0;
+}
+
+.content-area { padding: 15px 20px; display: flex; flex-direction: column; align-items: center; width: 100%; flex: 1; }
+
+.logo-container {
+    margin-top: -45px; background: #ffbc0d; width: 60px; height: 60px; border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: flex; justify-content: center; align-items: center;
+    font-size: 26px; border: 4px solid white; z-index: 10; flex-shrink: 0;
+}
+
+.tab-container { display: flex; width: 100%; margin-top: 15px; border: 1px solid #dcdcdc; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.tab-btn { flex: 1; padding: 10px; border: none; background-color: #e0e0e0; color: #555; font-size: 15px; font-weight: 600; cursor: pointer; }
+.tab-btn.active { background-color: #ffffff; color: #000000; }
+.welcome-text { font-size: 20px; font-weight: 600; color: #333; margin: 15px 0; text-align: center; }
+.auth-section { width: 100%; display: flex; flex-direction: column; }
+.input-group { width: 100%; margin-bottom: 12px; }
+.input-group input { width: 100%; padding: 12px 14px; border: none; background-color: #e5e5e5; border-radius: 8px; font-size: 14px; outline: none; }
+
+.main-btn {
+    width: 100%; padding: 12px; border: none; background-color: #ffbc0d; 
+    color: #000; font-size: 16px; font-weight: 600; border-radius: 8px; cursor: pointer; margin-top: 5px;
+}
+
+.footer-links { margin-top: 15px; text-align: center; padding-bottom: 15px; }
+.switch-auth { font-size: 13px; color: #333; }
+.switch-auth a { color: #ffbc0d; text-decoration: none; font-weight: 600; }
+
+/* होम बैनर और सर्च */
+/* 📸 टॉप बैनर का मुख्य डिब्बा (इसका साइज फिक्स होना जरूरी है) */
+.top-banner-container {
+    width: 100%;
+    height: 140px; /* 👈 हाइट फिक्स रखें ताकि यह नीचे वाले कंटेंट को न दबाए */
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    flex-shrink: 0; /* 👈 यह लाइन बहुत जरूरी है */
+}
+
+/* 🔄 बैनर को लपेटने वाला अंदर का रैपर */
+.top-banner-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* 🍕 सिंगल बैनर स्लाइड का स्टाइल */
+.top-slide {
+    width: 100%;
+    height: 100%;
+    display: none; /* जावास्क्रिप्ट केवल एक्टिव बैनर को शो करेगी */
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* 🟢 जो बैनर एक्टिव होगा सिर्फ वही दिखेगा */
+.top-slide.active-banner {
+    display: flex;
+}
+.search-box { width: 100%; margin-bottom: 15px; position: relative; flex-shrink: 0; }
+.search-box input { width: 100%; padding: 10px 15px 10px 40px; border: none; background-color: #e5e5e5; border-radius: 25px; font-size: 14px; outline: none; text-align: center; }
+.search-box .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #666; }
+
+.middle-slider { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; flex-shrink: 0; }
+.arrow-btn { background: none; border: none; font-size: 26px; font-weight: bold; color: #333; cursor: pointer; padding: 5px 10px; }
+.food-items-row { display: flex; gap: 10px; overflow: hidden; width: 80%; justify-content: center; }
+.thumb-card { width: 70px; height: 70px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 22px; background-color: #eee; border: 3px solid transparent; cursor: pointer; }
+.thumb-card.active-border { border: 3px solid #ffbc0d; transform: scale(1.05); }
+
+.special-section { width: 100%; flex-shrink: 0; }
+.main-food-card { display: flex; align-items: center; background-color: #e5e5e5; border-radius: 12px; padding: 12px; }
+.main-food-icon { font-size: 36px; margin-right: 15px; background: white; padding: 8px; border-radius: 10px; }
+.food-details h3 { font-size: 18px; margin-bottom: 4px; }
+.food-details p { font-size: 13px; color: #555; }
+
+/* 2-कॉलम फ़ूड ग्रिड लेआउट */
+.list-header { display: flex; align-items: center; margin-bottom: 15px; background-color: #ffffff; padding: 5px 0; }
+.back-btn { background: none; border: none; font-size: 22px; cursor: pointer; margin-right: 15px; font-weight: bold; color: #333; }
+.list-title { font-size: 22px; font-weight: bold; color: #333; }
+.category-title { font-size: 20px; font-weight: 600; margin-bottom: 15px; color: #333; }
+
+.food-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; width: 100%; }
+.grid-card { background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
+.grid-image-box { width: 100%; height: 90px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: center; align-items: center; font-size: 38px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.grid-card h4 { font-size: 14px; color: #333; font-weight: 600; margin-top: 2px; }
+
+/* डिलीट बटन स्टाइल */
+.delete-btn { background-color: #ff3333; color: white; border: none; padding: 4px 10px; border-radius: 50px; font-size: 11px; cursor: pointer; margin-top: 5px; width: 80%; font-weight: bold; }
+
+/* रेसिपी डिटेल पेज */
+.detail-banner { width: 100%; height: 140px; position: relative; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+.back-btn-white { position: absolute; left: 15px; top: 15px; background: rgba(255,255,255,0.8); border: none; font-size: 20px; border-radius: 50px; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; }
+.detail-circle-icon { width: 75px; height: 75px; background: white; border-radius: 50px; display: flex; justify-content: center; align-items: center; font-size: 38px; margin-top: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 4px solid white; z-index: 5; }
+.detail-body { padding: 50px 20px 20px 20px; display: flex; flex-direction: column; background: white; flex: 1; }
+.detail-name { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 5px; text-align: center; }
+.meta-row { display: flex; justify-content: center; gap: 20px; color: #666; font-size: 14px; font-weight: 500; margin-bottom: 25px; }
+.steps-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+.step-row { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #444; }
+.bullet { width: 8px; height: 8px; background: #ff5500; border-radius: 50px; margin-top: 6px; flex-shrink: 0; }
+.final-success-msg { font-size: 16px; font-weight: 600; color: #ff9900; margin-bottom: 25px; text-align: center; font-style: italic; }
+.add-to-cart-btn { width: 100%; padding: 14px; border: none; background-color: #ffbc0d; color: #000; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: auto; }
+
+/* प्रोफ़ाइल पेज */
+.profile-banner { width: 100%; height: 130px; background: linear-gradient(135deg, #ff9900, #ff5500); display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 20px; flex-shrink: 0; }
+.profile-body { padding: 20px; display: flex; flex-direction: column; align-items: center; flex: 1; }
+.profile-avatar { margin-top: -50px; background: #ffbc0d; width: 60px; height: 60px; border-radius: 50px; display: flex; justify-content: center; align-items: center; font-size: 26px; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 10px; z-index: 5; }
+.profile-name { font-size: 20px; color: #333; margin-bottom: 3px; }
+.customer-no { font-size: 12px; color: #777; margin-bottom: 20px; }
+.details-list { width: 100%; text-align: left; margin-bottom: 25px; font-size: 14px; color: #444; line-height: 2.2; }
+
+/* 🧭 फिक्स्ड बॉटम बार */
+.bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: #ffffff; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+.nav-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 13px; cursor: pointer; }
+.nav-item.active { color: #ff5500; font-weight: bold; }
+.nav-icon { font-size: 18px; margin-bottom: 2px; }
+
+</style>
+<body>
+
+    <!-- 📱 मुख्य मोबाइल फ्रेम कंटेनर (Width: 400px, Height: 667px) -->
+    <div class="phone-container">
+        
+        <!-- ================= 🔐 स्क्रीन 1: लॉगिन / साइन-अप ================= -->
+        <div id="auth-screen" class="app-screen">
+            <div class="auth-scroll-area">
+                <div class="image-header">Delicious Food</div>
+                <div class="content-area">
+                    <div class="logo-container">👨‍🍳</div>
+                    <div class="tab-container">
+                        <button id="tab-login" class="tab-btn active">Login</button>
+                        <button id="tab-signup" class="tab-btn">Sign Up</button>
+                    </div>
+
+                    <!-- लॉगिन फ़ॉर्म -->
+                    <div id="login-section" class="auth-section">
+                        <h2 class="welcome-text">Welcome Back Raj</h2>
+                        <form class="auth-form" id="loginForm">
+                            <div class="input-group"><input type="text" id="loginEmail" placeholder="Enter Email/Phone Number" required></div>
+                            <div class="input-group"><input type="password" id="loginPassword" placeholder="Enter Your Password" required></div>
+                            <button type="submit" class="main-btn">Login</button>
+                        </form>
+                        <div class="footer-links">
+                            <p class="switch-auth">Don't Have Any Account? <a href="#" id="link-signup">Sign Up</a></p>
+                        </div>
+                    </div>
+
+                    <!-- साइन-अप फ़ॉर्म -->
+                    <div id="signup-section" class="auth-section hidden">
+                        <h2 class="welcome-text">Create Your Account</h2>
+                        <form class="auth-form" id="signupForm">
+                            <div class="input-group"><input type="text" placeholder="Enter Your Name" required></div>
+                            <div class="input-group"><input type="email" placeholder="Enter Your Email" required></div>
+                            <div class="input-group"><input type="password" placeholder="Enter Your Password" required></div>
+                            <div class="input-group"><input type="password" placeholder="Confirm Your Password" required></div>
+                            <button type="submit" class="main-btn">Sign Up</button>
+                        </form>
+                        <div class="footer-links">
+                            <p class="switch-auth">Already Have An Account? <a href="#" id="link-login">Login</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 🏠 स्क्रीन 2: मुख्य होम पेज ================= -->
+        <div id="home-screen" class="app-screen hidden">
+            <div class="home-scroll-area">
+                <div class="top-banner-container">
+                    <div class="top-banner-wrapper">
+                        <div class="top-slide active-banner" style="background: linear-gradient(135deg, #ff9900, #ff5500);">🍕 Hot Pizza Offer!</div>
+                        <div class="top-slide" style="background: linear-gradient(135deg, #00b4db, #0083b0);">🍔 Burger Weekend!</div>
+                    </div>
+                </div>
+
+                <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search Your Food"></div>
+
+                <div class="middle-slider">
+                    <button class="arrow-btn" id="prevBtn">&#10094;</button>
+                    <div class="food-items-row">
+                        <div id="thumb0" class="thumb-card active-border">🍲</div>
+                        <div id="thumb1" class="thumb-card">🥞</div>
+                        <div id="thumb2" class="thumb-card">🍔</div>
+                    </div>
+                    <button class="arrow-btn" id="nextBtn">&#10095;</button>
+                </div>
+
+                <div class="special-section">
+                    <div class="main-food-card">
+                        <div id="mainFoodIcon" class="main-food-icon">🍲</div>
+                        <div class="food-details"><h3 id="mainFoodTitle">Paneer Bhurji</h3><p id="mainFoodTime">⏱️ 20 Min</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 🔍 स्क्रीन 3: सर्च / कैटेगरी लिस्ट ================= -->
+        <div id="search-screen" class="app-screen hidden">
+            <div class="home-scroll-area">
+                <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search Your Food"></div>
+                <h3 class="category-title">Category list</h3>
+
+                <div class="middle-slider" style="margin-top: 10px;">
+                    <button class="arrow-btn" id="catPrevBtn">&#10094;</button>
+                    <div class="food-items-row" style="gap: 15px;">
+                        <div id="catThumb0" class="thumb-card" style="width: 100px; height: 100px; font-size: 40px; background-color: #f8f8f8; border: 1px solid #ddd;">🍿</div>
+                        <div id="catThumb1" class="thumb-card" style="width: 100px; height: 100px; font-size: 40px; background-color: #f8f8f8; border: 1px solid #ddd;">🍛</div>
+                    </div>
+                    <button class="arrow-btn" id="catNextBtn">&#10095;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 🍲 स्क्रीन 4: दो-दो की ग्रिड फ़ूड लिस्ट ================= -->
+        <div id="food-list-screen" class="app-screen hidden">
+            <div class="home-scroll-area">
+                <div class="list-header">
+                    <button class="back-btn" id="backToSearch">⬅️</button>
+                    <h3 class="list-title" id="gridScreenTitle">Snacks</h3>
+                </div>
+                <div class="food-grid" id="foodGridContainer">
+                    <!-- कार्ड्स JS द्वारा यहाँ लोड होंगे -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 📜 स्क्रीन 5: रेसिपी डिटेल पेज ================= -->
+        <div id="food-detail-screen" class="app-screen hidden">
+            <div class="home-scroll-area" style="padding: 0;">
+                <div class="detail-banner" id="detailImageHeader">
+                    <button class="back-btn-white" id="backToGrid">⬅️</button>
+                    <div class="detail-circle-icon" id="detailFoodIcon">🥟</div>
+                </div>
+                <div class="detail-body">
+                    <h2 class="detail-name" id="detailFoodName">Samosa</h2>
+                    <div class="meta-row">
+                        <span id="detailFoodTime">⏱️ 20 Min</span>
+                        <span id="detailFoodRating">⭐⭐⭐</span>
+                    </div>
+                    <h3 style="font-size: 18px; color: #333; margin-bottom: 15px;">Ingredients & Steps</h3>
+                    <div class="steps-box" id="detailStepsContainer">
+                        <!-- स्टेप्स JS द्वारा यहाँ लोड होंगे -->
+                    </div>
+                    <div class="final-success-msg" id="detailFinalMsg">Then Samosa Is Ready</div>
+                    <button class="add-to-cart-btn" id="addToCartBtn">Add To Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 🛒 स्क्रीन 6: सेव लिस्ट / कार्ट ग्रिड ================= -->
+        <div id="cart-screen" class="app-screen hidden">
+            <div class="home-scroll-area">
+                <h3 class="category-title" style="margin-top: 10px;">Saved Food Items</h3>
+                <div class="food-grid" id="cartItemsContainer">
+                    <!-- सेव्ड कार्ड्स JS द्वारा यहाँ लोड होंगे -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 👤 स्क्रीन 7: प्रोफ़ाइल और लॉगआउट ================= -->
+        <div id="profile-screen" class="app-screen hidden">
+            <div class="home-scroll-area" style="padding: 0;">
+                <div class="profile-banner">Delicious Profile</div>
+                <div class="profile-body">
+                    <div class="profile-avatar">👨‍🍳</div>
+                    <h3 class="profile-name">Raj Kumar</h3>
+                    <span class="customer-no">Customer No: 20139490021</span>
+                    <div class="details-list">
+                        <p><strong>Email Address:</strong> raj9832kumar@gmail.com</p>
+                        <p><strong>Mobile No:</strong> 9832xxxx10</p>
+                        <p><strong>Veg Food:</strong> Yes</p>
+                        <p><strong>Saved Food:</strong> Yes</p>
+                    </div>
+                    <button id="logoutBtn" class="main-btn" style="background-color: #ff3333; color: white; margin-bottom: 12px;">Logout</button>
+                    <button id="cancelProfileBtn" class="main-btn" style="background-color: #e5e5e5; color: #333;">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🧭 फिक्स्ड बॉटम बार (सभी पेजों के नीचे फिक्स रहेगा) -->
+        <div id="global-nav" class="bottom-nav hidden">
+            <div class="nav-item active" id="nav-home"><span class="nav-icon">🏠</span>Home</div>
+            <div class="nav-item" id="nav-search"><span class="nav-icon">🔍</span>Search</div>
+            <div class="nav-item" id="nav-cart"><span class="nav-icon">🛒</span>Cart</div>
+            <div class="nav-item" id="nav-profile"><span class="nav-icon">👤</span>Profile</div>
+        </div>
+
+    </div>
+
+    <!-- जावास्क्रिप्ट फाइल को लिंक किया गया है -->
+    <script>
+    // ================= 🧭 1. एलिमेंट्स सेलेक्शन =================
+const tabLogin = document.getElementById('tab-login');
+const tabSignup = document.getElementById('tab-signup');
+const loginSection = document.getElementById('login-section');
+const signupSection = document.getElementById('signup-section');
+const linkSignup = document.getElementById('link-signup');
+const linkLogin = document.getElementById('link-login');
+
+const authScreen = document.getElementById('auth-screen');
+const homeScreen = document.getElementById('home-screen');
+const searchScreen = document.getElementById('search-screen');
+const foodListScreen = document.getElementById('food-list-screen');
+const foodDetailScreen = document.getElementById('food-detail-screen');
+const cartScreen = document.getElementById('cart-screen');
+const profileScreen = document.getElementById('profile-screen'); 
+const globalNav = document.getElementById('global-nav');
+
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+const navHome = document.getElementById('nav-home');
+const navSearch = document.getElementById('nav-search');
+const navCart = document.getElementById('nav-cart');
+const navProfile = document.getElementById('nav-profile'); 
+
+const gridScreenTitle = document.getElementById('gridScreenTitle');
+const foodGridContainer = document.getElementById('foodGridContainer');
+const backToSearch = document.getElementById('backToSearch');
+const backToGrid = document.getElementById('backToGrid');
+
+const addToCartBtn = document.getElementById('addToCartBtn');
+const cartItemsContainer = document.getElementById('cartItemsContainer');
+
+const logoutBtn = document.getElementById('logoutBtn'); 
+const cancelProfileBtn = document.getElementById('cancelProfileBtn'); 
+
+// ================= 🔐 2. लॉगिन / साइन-अप फ्लो =================
+tabLogin.addEventListener('click', () => { 
+    loginSection.classList.remove('hidden'); 
+    signupSection.classList.add('hidden'); 
+    tabLogin.classList.add('active'); 
+    tabSignup.classList.remove('active'); 
+});
+
+tabSignup.addEventListener('click', () => { 
+    signupSection.classList.remove('hidden'); 
+    loginSection.classList.add('hidden'); 
+    tabSignup.classList.add('active'); 
+    tabLogin.classList.remove('active'); 
+});
+
+linkSignup.addEventListener('click', (e) => { 
+    e.preventDefault(); 
+    signupSection.classList.remove('hidden'); 
+    loginSection.classList.add('hidden'); 
+    tabSignup.classList.add('active'); 
+    tabLogin.classList.remove('active'); 
+});
+
+linkLogin.addEventListener('click', (e) => { 
+    e.preventDefault(); 
+    loginSection.classList.remove('hidden'); 
+    signupSection.classList.add('hidden'); 
+    tabLogin.classList.add('active'); 
+    tabSignup.classList.remove('active'); 
+});
+
+// फिक्स आईडी-पासवर्ड चेक (raj@gmail.com / 12345)
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (document.getElementById('loginEmail').value === "raj@gmail.com" && document.getElementById('loginPassword').value === "12345") {
+        authScreen.classList.add('hidden'); 
+        homeScreen.classList.remove('hidden'); 
+        globalNav.classList.remove('hidden');
+    } else { 
+        alert("गलत ईमेल या पासवर्ड!\n(Hint: raj@gmail.com / 12345)"); 
+    }
+});
+
+signupForm.addEventListener('submit', (e) => { 
+    e.preventDefault(); 
+    authScreen.classList.add('hidden'); 
+    homeScreen.classList.remove('hidden'); 
+    globalNav.classList.remove('hidden'); 
+});
+
+// ================= 🧭 3. बॉटम बार स्क्रीन नेविगेशन =================
+function resetScreens() { 
+    homeScreen.classList.add('hidden'); 
+    searchScreen.classList.add('hidden'); 
+    foodListScreen.classList.add('hidden'); 
+    foodDetailScreen.classList.add('hidden'); 
+    cartScreen.classList.add('hidden');
+    profileScreen.classList.add('hidden'); 
+    
+    navHome.classList.remove('active');
+    navSearch.classList.remove('active');
+    navCart.classList.remove('active');
+    navProfile.classList.remove('active'); 
+}
+
+navHome.addEventListener('click', () => { resetScreens(); homeScreen.classList.remove('hidden'); navHome.classList.add('active'); });
+navSearch.addEventListener('click', () => { resetScreens(); searchScreen.classList.remove('hidden'); navSearch.classList.add('active'); });
+navCart.addEventListener('click', () => { resetScreens(); cartScreen.classList.remove('hidden'); navCart.classList.add('active'); renderCart(); });
+navProfile.addEventListener('click', () => { resetScreens(); profileScreen.classList.remove('hidden'); navProfile.classList.add('active'); }); 
+
+// ================= 🏠 4. मुख्य होम स्क्रीन स्लाइडर =================
+const prevBtn = document.getElementById('prevBtn'); 
+const nextBtn = document.getElementById('nextBtn');
+const banners = document.querySelectorAll('.top-slide'); 
+const mainFoodIcon = document.getElementById('mainFoodIcon');
+const mainFoodTitle = document.getElementById('mainFoodTitle'); 
+const mainFoodTime = document.getElementById('mainFoodTime');
+const thumb0 = document.getElementById('thumb0'); 
+const thumb1 = document.getElementById('thumb1'); 
+const thumb2 = document.getElementById('thumb2');
+
+const homeStates = [
+    { icon: "🍲", title: "Paneer Bhurji", time: "⏱️ 20 Min", t0: "🍲", t1: "🥞", t2: "🍔" },
+    { icon: "🥗", title: "Matar Paneer", time: "⏱️ 30 Min", t0: "🥗", t1: "🍟", t2: "🥪" }
+];
+let currentHomeState = 0;
+
+function updateHomeScreen(index) {
+    banners.forEach((b, i) => b.classList.toggle('active-banner', i === index));
+    mainFoodIcon.textContent = homeStates[index].icon; 
+    mainFoodTitle.textContent = homeStates[index].title; 
+    mainFoodTime.textContent = homeStates[index].time;
+    thumb0.textContent = homeStates[index].t0; 
+    thumb1.textContent = homeStates[index].t1; 
+    thumb2.textContent = homeStates[index].t2;
+}
+
+nextBtn.addEventListener('click', () => { 
+    currentHomeState = (currentHomeState + 1) % homeStates.length; 
+    updateHomeScreen(currentHomeState); 
+});
+
+prevBtn.addEventListener('click', () => { 
+    currentHomeState = (currentHomeState - 1 + homeStates.length) % homeStates.length; 
+    updateHomeScreen(currentHomeState); 
+});
+
+// ================= 🍿🍛 5. सर्च कैटेगरी स्लाइडर लॉजिक =================
+const catPrevBtn = document.getElementById('catPrevBtn'); 
+const catNextBtn = document.getElementById('catNextBtn');
+const catThumb0 = document.getElementById('catThumb0'); 
+const catThumb1 = document.getElementById('catThumb1');
+
+const catStates = [
+    { type0: "Snacks", icon0: "🍿", type1: "Main Foods", icon1: "🍛" },
+    { type0: "Breakfast", icon0: "🥞", type1: "Dessert", icon1: "🧁" }
+];
+let currentCatState = 0;
+
+function updateCatScreen(index) { 
+    catThumb0.textContent = catStates[index].icon0; 
+    catThumb1.textContent = catStates[index].icon1; 
+}
+
+catNextBtn.addEventListener('click', () => { 
+    currentCatState = (currentCatState + 1) % catStates.length; 
+    updateCatScreen(currentCatState); 
+});
+
+catPrevBtn.addEventListener('click', () => { 
+    currentCatState = (currentCatState - 1 + catStates.length) % catStates.length; 
+    updateCatScreen(currentCatState); 
+});
+
+// ================= 🎛️ 6. फ़ूड लिस्ट और रेसिपी का सटीक डेटा =================
+const gridData = {
+    "🍿": {
+        title: "Snacks",
+        items: [
+            {n:"Samosa", icon:"🥟", bg:"linear-gradient(135deg, #f12711, #f5af19)", hasDetail: true, time: "20 Min", rating: "⭐⭐⭐", ingredients: ["Dough Prepared", "Making Fill", "Making Samosa Shape", "Its Time To Fry"], finalMsg: "Then Samosa Is Ready"}, 
+            {n:"Pakoda", icon:"🍟", bg:"linear-gradient(135deg, #ffd200, #f7971e)", hasDetail: false}, 
+            {n:"Cutlet", icon:"🧆", bg:"linear-gradient(135deg, #11998e, #38ef7d)", hasDetail: false}, 
+            {n:"Sandwich", icon:"🥪", bg:"linear-gradient(135deg, #ff9900, #ff5500)", hasDetail: false}
+        ]
+    },
+    "🍛": {
+        title: "Main Foods",
+        items: [
+            {n:"Matar Paneer", icon:"🥗", bg:"linear-gradient(135deg, #ffe259, #ffa751)", hasDetail: true, time: "30 Min", rating: "⭐⭐⭐⭐", ingredients: ["Masala Prepared", "Mattar Added", "Paneer Added", "Gravy Added"], finalMsg: "Then Matar Paneer Is Ready"},
+            {n:"Paneer Bhurji", icon:"🍲", bg:"linear-gradient(135deg, #00b4db, #0083b0)", hasDetail: false}, 
+            {n:"Dal Tadka", icon:"🥣", bg:"linear-gradient(135deg, #7f00ff, #e100ff)", hasDetail: false}, 
+            {n:"Mix Veg", icon:"🥘", bg:"linear-gradient(135deg, #ff4e50, #f9d423)", hasDetail: false}
+        ]
+    },
+    "🥞": {
+        title: "Breakfast",
+        items: [
+            {n:"Paratha", icon:"🫓", bg:"linear-gradient(135deg, #ffd200, #f7971e)", hasDetail: true, time: "20 Min", rating: "⭐⭐⭐", ingredients: ["Dough Prepared", "Pratha Rolled", "Cook On Tawa", "Ghee Applied"], finalMsg: "Then Pratha Is Ready"},
+            {n:"Poha", icon:"🍚", bg:"linear-gradient(135deg, #11998e, #38ef7d)", hasDetail: false}, 
+            {n:"Upma", icon:"🍲", bg:"linear-gradient(135deg, #ff9900, #ff5500)", hasDetail: false}, 
+            {n:"Idli", icon:"⚪", bg:"linear-gradient(135deg, #eef2f3, #8e9eab)", hasDetail: false}
+        ]
+    },
+    "🧁": {
+        title: "Dessert",
+        items: [
+            {n:"Kheer", icon:"🥛", bg:"linear-gradient(135deg, #00b4db, #0083b0)", hasDetail: true, time: "30 Min", rating: "⭐⭐⭐", ingredients: ["Milk Boiled", "Rice Added", "Sugar Mixed", "Cook Till Milk Thickens"], finalMsg: "Then Kheer Is Ready"},
+            {n:"Halwa", icon:"🍮", bg:"linear-gradient(135deg, #f12711, #f5af19)", hasDetail: false}, 
+            {n:"Gulab Jamun", icon:"🟤", bg:"linear-gradient(135deg, #8a2387, #e94057)", hasDetail: false}, 
+            {n:"Jalebi", icon:"🌀", bg:"linear-gradient(135deg, #ff9900, #f5af19)", hasDetail: false}
+        ]
+    }
+};
+
+// ================= 🛒 7. सेव / कार्ट लिस्ट एरे =================
+let savedCartList = []; 
+let currentActiveItem = null; 
+
+function openFoodGrid(categoryIcon) {
+    const data = gridData[categoryIcon];
+    if(!data) return;
+
+    gridScreenTitle.textContent = data.title;
+    foodGridContainer.innerHTML = ""; 
+
+    data.items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'grid-card';
+        card.innerHTML = `
+            <div class="grid-image-box" style="background: ${item.bg};">${item.icon}</div>
+            <h4>${item.n}</h4>
+        `;
+        
+        card.addEventListener('click', () => {
+            if(item.hasDetail) {
+                openFoodDetail(item);
+            } else {
+                alert(`${item.n} की डिटेल जल्द आ रही है! कृपया ${data.title === 'Snacks' ? 'Samosa' : data.title === 'Main Foods' ? 'Matar Paneer' : data.title === 'Breakfast' ? 'Paratha' : 'Kheer'} पर क्लिक करें।`);
+            }
+        });
+        foodGridContainer.appendChild(card);
+    });
+
+    searchScreen.classList.add('hidden');
+    foodListScreen.classList.remove('hidden');
+}
+
+catThumb0.addEventListener('click', () => openFoodGrid(catThumb0.textContent));
+catThumb1.addEventListener('click', () => openFoodGrid(catThumb1.textContent));
+
+backToSearch.addEventListener('click', () => { 
+    foodListScreen.classList.add('hidden'); 
+    searchScreen.classList.remove('hidden'); 
+});
+
+// ================= 📜 8. रेसिपी डिटेल और ऐड टू कार्ट =================
+function openFoodDetail(item) {
+    currentActiveItem = item; 
+    
+    document.getElementById('detailImageHeader').style.background = item.bg;
+    document.getElementById('detailFoodIcon').textContent = item.icon;
+    document.getElementById('detailFoodName').textContent = item.n;
+    document.getElementById('detailFoodTime').textContent = `⏱️ ${item.time}`;
+    document.getElementById('detailFoodRating').textContent = item.rating;
+    document.getElementById('detailFinalMsg').textContent = item.finalMsg;
+
+    const stepsContainer = document.getElementById('detailStepsContainer');
+    stepsContainer.innerHTML = ""; 
+
+    item.ingredients.forEach((stepText) => {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'step-row';
+        stepDiv.innerHTML = `
+            <span class="bullet"></span>
+            <p><strong>Step .</strong> ${stepText}</p>
+        `;
+        stepsContainer.appendChild(stepDiv);
+    });
+
+    foodListScreen.classList.add('hidden');
+    foodDetailScreen.classList.remove('hidden');
+}
+
+backToGrid.addEventListener('click', () => { 
+    foodDetailScreen.classList.add('hidden'); 
+    foodListScreen.classList.remove('hidden'); 
+});
+
+addToCartBtn.addEventListener('click', () => {
+    if (currentActiveItem) {
+        const isAlreadySaved = savedCartList.some(item => item.n === currentActiveItem.n);
+        
+        if (!isAlreadySaved) {
+            savedCartList.push(currentActiveItem); 
+            alert(`${currentActiveItem.n} को सेव लिस्ट में जोड़ दिया गया है! 🛒`);
+        } else {
+            alert(`${currentActiveItem.n} पहले से ही सेव है!`);
+        }
+    }
+});
+
+// ================= 🗑️ 9. कार्ट रेंडर और डिलीट फ़ंक्शनलिटी =================
+function renderCart() {
+    cartItemsContainer.innerHTML = ""; 
+
+    if (savedCartList.length === 0) {
+        cartItemsContainer.innerHTML = `<p style="grid-column: span 2; text-align: center; color: #888; font-weight: 500; margin-top: 50px;">आपकी लिस्ट खाली है! 🍿</p>`;
+        return;
+    }
+
+    savedCartList.forEach((item, index) => {
+        const cartCard = document.createElement('div');
+        cartCard.className = 'grid-card';
+        cartCard.innerHTML = `
+            <div class="grid-image-box" style="background: ${item.bg}; height: 80px;">${item.icon}</div>
+            <h4 style="margin-bottom: 8px;">${item.n}</h4>
+            <button class="delete-btn" onclick="deleteCartItem(${index})">Delete</button>
+        `;
+        cartItemsContainer.appendChild(cartCard);
+    });
+}
+
+window.deleteCartItem = function(index) {
+    savedCartList.splice(index, 1); 
+    renderCart(); 
+};
+
+// ================= 🚪 10. प्रोफाइल लॉगआउट / कैंसिल एक्शन्स =================
+logoutBtn.addEventListener('click', () => {
+    const isConfirm = confirm("क्या आप सचमुच लॉगआउट करना चाहते हैं? 🚪");
+    if(isConfirm) {
+        resetScreens();
+        globalNav.classList.add('hidden'); 
+        authScreen.classList.remove('hidden'); 
+        showLogin(); 
+    }
+});
+
+cancelProfileBtn.addEventListener('click', () => {
+    resetScreens();
+    homeScreen.classList.remove('hidden'); 
+    navHome.classList.add('active'); 
+});
+
+    </script>
+</body>
+</html>
