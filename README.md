@@ -15,6 +15,8 @@ A user-centric food delivery mobile application focused on simplifying the order
 *
 "<img width="484" height="577" alt="image" src="https://github.com/user-attachments/assets/df2de176-7e43-4d7c-b2eb-40d2000945f8" />
 "
+*<img width="756" height="412" alt="image" src="https://github.com/user-attachments/assets/3d2e3f06-151d-45ee-aa40-8326eedf6875" />
+*
 
 
 ---
