@@ -6,13 +6,15 @@ A user-centric food delivery mobile application focused on simplifying the order
 
 ## 🚀 Case Study Links
 *   🎨 ****
-   **https://github.com/shivbaba1905/food-app/tree/main**
+   ****
 
 ---
 
 ## 📸 Presentation & UI Mockups
 *<img width="551" height="684" alt="image" src="https://github.com/user-attachments/assets/16987a82-6242-4aba-8a3f-93f2a57f06dc" />
 *
+"<img width="484" height="577" alt="image" src="https://github.com/user-attachments/assets/df2de176-7e43-4d7c-b2eb-40d2000945f8" />
+"
 
 
 ---
